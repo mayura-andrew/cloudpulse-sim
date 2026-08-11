@@ -14,10 +14,11 @@ npm run dev
 
 Backend integration options:
 
-- Development: run the Go backend in server mode in the project root. This exposes processing endpoints on `http://localhost:8080`:
+- Development: run the Go backend from the `server` module. This exposes processing endpoints on `http://localhost:8080`:
 
 ```bash
-go run . serve
+cd server
+go run ./cmd/server serve
 ```
 
 - The frontend upload button will POST the CSV to `http://localhost:8080/api/upload` and receive processed JSON rows for visualization.

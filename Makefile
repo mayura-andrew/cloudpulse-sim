@@ -3,13 +3,13 @@
 .PHONY: build-server run-server build-frontend run-frontend
 
 build-server:
-	cd server && go build -o cloudpulse-server .
+	cd server && go build -o cloudpulse-server ./cmd/server
 
 run-server:
-	cd server && go run . serve
+	cd server && go run ./cmd/server serve
 
 build-frontend:
-	cd frontend && npm ci && npm run build
+	cd frontend && pnpm install && pnpm build
 
 run-frontend:
-	cd frontend && npm ci && npm run dev
+	cd frontend && pnpm install && pnpm dev
