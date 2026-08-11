@@ -132,14 +132,28 @@ func handleProcessDefault(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "method not allowed", http.StatusMethodNotAllowed)
 		return
 	}
-	input := filepath.Join("..", "dataset.csv")
-	if _, err := os.Stat(input); err != nil {
-		http.Error(w, "dataset.csv not found in workspace", http.StatusNotFound)
+	candidates := []string{
+		filepath.Join("..", "cloud_task_scheduling_dataset.csv"),
+		filepath.Join("..", "cloud_task_scheduling_dataset_20k.csv"),
+		filepath.Join("..", "dataset.csv"),
+		"cloud_task_scheduling_dataset.csv",
+		"cloud_task_scheduling_dataset_20k.csv",
+		"dataset.csv",
+	}
+	var input string
+	for _, cand := range candidates {
+		if _, err := os.Stat(cand); err == nil {
+			input = cand
+			break
+		}
+	}
+	if input == "" {
+		http.Error(w, "no default dataset found in workspace", http.StatusNotFound)
 		return
 	}
 	tasks, err := processor.LoadKaggleCSV(input)
 	if err != nil {
-		http.Error(w, "failed to load dataset.csv", http.StatusInternalServerError)
+		http.Error(w, fmt.Sprintf("failed to load dataset (%s): %v", input, err), http.StatusInternalServerError)
 		return
 	}
 	processor.SimulateQueueingDynamics(tasks)
