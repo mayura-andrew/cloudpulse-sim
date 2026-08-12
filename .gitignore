@@ -6,3 +6,5 @@ server/generated/
 generated/
 server/*.csv
 *.csv.tmp
+mini_project_report.md
+report.txt
